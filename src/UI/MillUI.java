@@ -12,18 +12,21 @@ public class MillUI {
     private static final String CONNECT = "connect";
     private static final String OPEN = "open";
     private static final String SET = "set";
+    private static String[] playerNames= new String[2];
     private final PrintStream outStream;
     private final String playerName;
     private final BufferedReader inBufferedReader;
 
 
-    public static void main (String[] args) {
 
+    public static void main (String[] args) {
+        playerNames[0]="Thomas";
         System.out.println("Welcome to Mill!");
 
-        MillUI userCmd = new MillUI(args[0], System.out, System.in);
+        MillUI userCmd = new MillUI(playerNames[0], System.out, System.in);
 
-       userCmd.printUsage();
+         userCmd.printUsage();
+         userCmd.runCommandLoop();
     }
     public MillUI(String playerName, PrintStream os, InputStream is) {
         this.playerName = playerName;
@@ -131,7 +134,7 @@ public class MillUI {
     }
 
     private void doSet (String parameterString) throws StatusException, GameException {
-        
+
     }
 
     private void doOpen() {
@@ -143,7 +146,7 @@ public class MillUI {
     private void doPrint() {
     }
 
-    public int mergeStringX(String xKoord) {
+    public int mergeStringX(String xKoord) throws IOException {
         int x=0;
         switch (xKoord){
             case "A":
@@ -156,13 +159,13 @@ public class MillUI {
                 x=2;
                 break;
             default:
-                //Thorw Exeption
+                throw new IOException("Eingabe der X Koordinate außerhalb des Feldes!");
         }
         return x;
     }
-    public void checkY(int y){
+    public void checkY(int y) throws IOException {
         if (y<0 || y>2){
-            //Thorw Exeption
+            throw new IOException("Eingabe der Y Koordinate außerhalb des Feldes!");
         }
     }
 }
