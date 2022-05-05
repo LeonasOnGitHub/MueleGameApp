@@ -12,29 +12,29 @@ public class UI2APITest {
         MillUI x = new MillUI();
         String xKoord = "A";
 
-        Assert.assertEquals(0, x.merchString(xKoord));
+        Assert.assertEquals(0, x.mergeStringX(xKoord));
     }
     @Test
     public void gutTest2() {
         MillUI x = new MillUI();
         String xKoord = "B";
-        x.merchString(xKoord);
+        x.mergeStringX(xKoord);
 
-        Assert.assertEquals(1, x.merchString(xKoord));
+        Assert.assertEquals(1, x.mergeStringX(xKoord));
     }
     @Test
     public void gutTest3(){
         MillUI x = new MillUI();
         String xKoord = "C";
-        x.merchString(xKoord);
+        x.mergeStringX(xKoord);
 
-        Assert.assertEquals(2, x.merchString(xKoord));
+        Assert.assertEquals(2, x.mergeStringX(xKoord));
     }
     @Test
     public void schlechtTest1(){
         MillUI x = new MillUI();
         String xKoord = "D";
-        x.merchString(xKoord);
+        x.mergeStringX(xKoord);
 
     }
 
