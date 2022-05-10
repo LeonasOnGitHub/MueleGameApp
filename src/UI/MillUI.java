@@ -1,12 +1,14 @@
 package UI;
 
 import Mill.GameException;
+import Mill.InputException;
 import Mill.StatusException;
 
 import java.io.*;
 
 public class MillUI {
 
+    private static int phase=0;
     private static final String PRINT = "print";
     private static final String EXIT = "exit";
     private static final String CONNECT = "connect";
@@ -20,14 +22,22 @@ public class MillUI {
 
 
     public static void main (String[] args) {
-        playerNames[0]="Thomas";
+
         System.out.println("Welcome to Mill!");
 
-        MillUI userCmd = new MillUI(playerNames[0], System.out, System.in);
+        getPLayerNames();
+        phase++;
 
-         userCmd.printUsage();
-         userCmd.runCommandLoop();
+        MillUI userCmd = new MillUI(playerNames[0], System.out, System.in);
+        userCmd.printUsage();
+        userCmd.runCommandLoop();
     }
+
+    private static void getPLayerNames() {
+        playerNames[0] = "Thomas";
+        playerNames[1] = "Phillip";
+    }
+
     public MillUI(String playerName, PrintStream os, InputStream is) {
         this.playerName = playerName;
         this.outStream = os;
@@ -52,7 +62,7 @@ public class MillUI {
         b.append(".. print board");
         b.append("\n");
         b.append(SET);
-        b.append(".. set a piece");
+        b.append(".. set a piece with SET (1-5) (A-E)");
         b.append("\n");
         b.append(EXIT);
         b.append(".. exit");
@@ -126,6 +136,8 @@ public class MillUI {
                 this.outStream.println("game exception: " + ex.getLocalizedMessage());
             } catch (RuntimeException ex) {
                 this.outStream.println("runtime problems: " + ex.getLocalizedMessage());
+            }catch (InputException ex) {
+                this.outStream.println("Wrong input " + ex.getLocalizedMessage());
             }
         }
     }
@@ -133,9 +145,13 @@ public class MillUI {
     private void doExit ()  throws IOException {
     }
 
-    private void doSet (String parameterString) throws StatusException, GameException {
+    private void doSet (String parameterString) throws StatusException, GameException, InputException {
 
+        checkStatusConnection();
+
+        mergeStringX(parameterString);
     }
+
 
     private void doOpen() {
     }
@@ -146,7 +162,7 @@ public class MillUI {
     private void doPrint() {
     }
 
-    public int mergeStringX(String xKoord) throws IOException {
+    public int mergeStringX(String xKoord) throws InputException {
         int x=0;
         switch (xKoord){
             case "A":
@@ -159,13 +175,18 @@ public class MillUI {
                 x=2;
                 break;
             default:
-                throw new IOException("Eingabe der X Koordinate außerhalb des Feldes!");
+                throw new InputException("for the X coordinate");
         }
         return x;
     }
-    public void checkY(int y) throws IOException {
-        if (y<0 || y>2){
-            throw new IOException("Eingabe der Y Koordinate außerhalb des Feldes!");
+    public void checkY(int yKoord) throws InputException {
+        if (yKoord<0 || yKoord>2){
+            throw new InputException("for the Y coordinate");
         }
     }
+
+    private void checkStatusConnection() {
+
+    }
+
 }

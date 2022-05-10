@@ -6,7 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/out" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Test" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/Test" />
+      <sourceFolder url="file://$MODULE_DIR$/Test" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/Test/UItoAPITest" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
