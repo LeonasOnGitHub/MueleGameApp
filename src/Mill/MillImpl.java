@@ -4,26 +4,26 @@ public class MillImpl implements Mill {
     private static int [][] board = new int[5][5];
 
     @Override
-    public int[][] setPiece( int xCoord, int yCoord, int playerMarc) throws InputException {
+    public void setPiece( int xCoord, int yCoord, int playerMarc) throws FieldStatusException {
 
-        if (this.board[xCoord][yCoord] == 0){
-           throw new InputException("There is a player marc on this field already! Please choose a different field");
+        if (this.board[xCoord][yCoord] != 0){
+           throw new FieldStatusException("There is a player marc on this field already! Please choose a different field");
        }
 
        this.board[xCoord][yCoord] = playerMarc;
 
-        return board;
+
     }
 
 
     @Override
-    public int[][] movePiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMarc) {
-        return board;
+    public void movePiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMarc) {
+
     }
 
     @Override
-    public int[][] jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMarc) {
-        return board;
+    public void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMarc) {
+
     }
 
     public int[][] getBoard() {

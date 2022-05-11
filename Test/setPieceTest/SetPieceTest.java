@@ -4,7 +4,7 @@ import Mill.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
+
 
 public class SetPieceTest {
 
@@ -12,29 +12,19 @@ public class SetPieceTest {
     //                                         Gut Tests                                                      //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
-    public void phase1GutTest1() throws InputException {
+    public void phase1GutTest1() throws FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
-        int [][]board= m1.getBoard();
+
+        int [][]board= new int[5][5];
         board[1][2]=1;
 
-        int [][] boardTest =m1.setPiece(1, 2, 1);
+        m1.setPiece(1, 2, 1);
 
-        Assert.assertArrayEquals(board, boardTest);
-
-    }
-    @Test
-    public void phase2GutTest1() throws InputException {
-        Mill m1 = new MillImpl();
-        m1.clearBoard();
-        int [][]board= m1.getBoard();
-        board[4][3]=2;
-
-        int [][] boardTest = m1.movePiece(2, 4, 2, 3, 2);
-        
-        Assert.assertArrayEquals(board, boardTest);
+        Assert.assertArrayEquals(board, m1.getBoard());
 
     }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                         Rand Tests                                                     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,24 +32,26 @@ public class SetPieceTest {
     public void phase1RandTest1() throws InputException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
-        int [][]board= m1.getBoard();
+
+        int [][]board= new int[5][5];
         board[board.length-1][board.length-1] = 2;
 
-        int[][] boardTest = m1.setPiece( board.length-1, board.length-1, 2);
+        m1.setPiece( board.length-1, board.length-1, 2);
 
-        Assert.assertArrayEquals(board, boardTest);
+        Assert.assertArrayEquals(board, m1.getBoard());
 
     }
     @Test
     public void phase1RandTest2() throws InputException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
-        int [][]board= m1.getBoard();
+
+        int [][]board= new int[5][5];
         board[0][0] = 2;
 
-        int[][] boardTest = m1.setPiece( 0, 0, 2);
+        m1.setPiece( 0, 0, 2);
 
-        Assert.assertArrayEquals(board, boardTest);
+        Assert.assertArrayEquals(board, m1.getBoard());
 
     }
 
