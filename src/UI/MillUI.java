@@ -137,7 +137,7 @@ public class MillUI {
             } catch (RuntimeException ex) {
                 this.outStream.println("runtime problems: " + ex.getLocalizedMessage());
             }catch (InputException ex) {
-                this.outStream.println("Wrong input " + ex.getLocalizedMessage());
+                this.outStream.println("wrong input " + ex.getLocalizedMessage());
             }
         }
     }
@@ -150,6 +150,22 @@ public class MillUI {
         checkStatusConnection();
 
         mergeStringX(parameterString);
+
+        switch (phase) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+            //Game over
+                break;
+        }
     }
 
 
