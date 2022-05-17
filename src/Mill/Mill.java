@@ -6,7 +6,7 @@ public interface Mill {
      * @param xCoord
      * @param yCoord
      * @param playerMarc
-     * @throws InputException
+     * @throws FieldStatusException
      */
     void setPiece(int xCoord, int yCoord, int playerMarc) throws FieldStatusException;
 
@@ -17,6 +17,8 @@ public interface Mill {
      * @param xCoordD
      * @param yCoordD
      * @param playerMarc
+     * @throws FieldStatusException
+     * @throws MovementExeption
      */
     void movePiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD,int playerMarc) throws FieldStatusException, MovementExeption;
 
@@ -27,6 +29,7 @@ public interface Mill {
      * @param xCoordD
      * @param yCoordD
      * @param playerMarc
+     * @throws FieldStatusException
      */
     void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD,int playerMarc) throws FieldStatusException;
 

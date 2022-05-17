@@ -1,7 +1,7 @@
 package Mill;
 
 public class MillImpl implements Mill {
-    private static int [][] board = new int[5][5];
+    private static int [][] board = new int[7][7];
 
     @Override
     public void setPiece( int xCoord, int yCoord, int playerMarc) throws FieldStatusException {
@@ -23,6 +23,11 @@ public class MillImpl implements Mill {
 
     @Override
     public void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMarc) {
+
+    }
+
+    @Override
+    public void removePiece(int xCoord, int yCoord, int playerMarc) throws FieldStatusException {
 
     }
 

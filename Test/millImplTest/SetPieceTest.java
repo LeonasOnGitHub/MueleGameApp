@@ -1,4 +1,4 @@
-package setPieceTest;
+package millImplTest;
 
 import Mill.*;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ public class SetPieceTest {
         Mill m1 = new MillImpl();
         m1.clearBoard();
 
-        int [][]board= new int[5][5];
+        int [][]board= new int[7][7];
         board[1][2]=1;
 
         m1.setPiece(1, 2, 1);
@@ -29,11 +29,11 @@ public class SetPieceTest {
     //                                         Rand Tests                                                     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
-    public void phase1RandTest1() throws InputException {
+    public void phase1RandTest1() throws  FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
 
-        int [][]board= new int[5][5];
+        int [][]board= new int[7][7];
         board[board.length-1][board.length-1] = 2;
 
         m1.setPiece( board.length-1, board.length-1, 2);
@@ -42,11 +42,11 @@ public class SetPieceTest {
 
     }
     @Test
-    public void phase1RandTest2() throws InputException {
+    public void phase1RandTest2() throws  FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
 
-        int [][]board= new int[5][5];
+        int [][]board= new int[7][7];
         board[0][0] = 2;
 
         m1.setPiece( 0, 0, 2);
@@ -58,8 +58,8 @@ public class SetPieceTest {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                         Schlecht Tests                                                 //
    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Test(expected = InputException.class)
-    public void phase1Schlechtest1() throws InputException {
+    @Test(expected = FieldStatusException.class)
+    public void phase1Schlechtest1() throws  FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
 
