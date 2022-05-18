@@ -62,7 +62,7 @@ public class MillUI {
         b.append(".. print board");
         b.append("\n");
         b.append(SET);
-        b.append(".. set a piece with SET (1-5) (A-E)");
+        b.append(".. set a piece with SET (0-6) (A-G)");
         b.append("\n");
         b.append(EXIT);
         b.append(".. exit");
@@ -148,8 +148,8 @@ public class MillUI {
     private void doSet (String parameterString) throws StatusException, GameException, InputException {
 
         checkStatusConnection();
-
-        mergeStringX(parameterString);
+        int xCoord = mergeStringX(parameterString);
+        checkIfFieldVoid();
 
         switch (phase) {
             case 1:
@@ -178,7 +178,7 @@ public class MillUI {
     private void doPrint() {
     }
 
-    public int mergeStringX(String xKoord) throws InputException {
+    private int mergeStringX(String xKoord) throws InputException {
         int x=0;
         switch (xKoord){
             case "A":
@@ -195,10 +195,13 @@ public class MillUI {
         }
         return x;
     }
-    public void checkY(int yKoord) throws InputException {
+    private void checkY(int yKoord) throws InputException {
         if (yKoord<0 || yKoord>2){
             throw new InputException("for the Y coordinate");
         }
+    }
+    private void checkIfFieldVoid(){
+
     }
 
     private void checkStatusConnection() {

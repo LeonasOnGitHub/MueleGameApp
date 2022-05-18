@@ -4,107 +4,100 @@ import Mill.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MovePieceTest {
-//TODO translate
+public class JumpPieceTest {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                         Gut Tests                                                      //
+    //                                        good Tests                                                      //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
-    public void gutTest1() throws FieldStatusException, MovementExeption {
+    public void goodTest1() throws FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
         m1.setPiece(3, 2, 1);
 
         int[][] board= new int [7][7];
-        board[2][2]=1;
+        board[5][5]=1;
 
-        m1.movePiece(3,2,2,2,1);
+        m1.jumpPiece(3,2,5,5,1);
         Assert.assertArrayEquals(board, m1.getBoard());
     }
     @Test
-    public void gutTest2() throws FieldStatusException, MovementExeption {
+    public void goodTest2() throws FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
-        m1.setPiece(4, 4, 2);
+        m1.setPiece(5, 3, 2);
 
         int[][] board= new int [7][7];
-        board[4][3]=2;
+        board[4][4]=1;
 
-        m1.movePiece(4,4,4,3,2);
+        m1.jumpPiece(5,3,4,4,1);
         Assert.assertArrayEquals(board, m1.getBoard());
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                         Rand Tests                                                     //
+    //                                        Edge Tests                                                     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
-    public void vomRandTest() throws FieldStatusException, MovementExeption {
+    public void fromEdgeTest() throws FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
         m1.setPiece(6, 3, 2);
 
         int[][] board= new int [7][7];
-        board[5][3]=2;
+        board[3][1]=2;
 
-        m1.movePiece(6,3,5,3,2);
+        m1.jumpPiece(6,3,3,1,2);
         Assert.assertArrayEquals(board, m1.getBoard());
     }
     @Test
-    public void amRandTest() throws FieldStatusException, MovementExeption {
+    public void onEdgeTest() throws FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
         m1.setPiece(6, 6, 1);
 
         int[][] board= new int [7][7];
-        board[3][6]=1;
+        board[0][6]=1;
 
-        m1.movePiece(6,6,3,6,1);
+        m1.jumpPiece(6,6,0,6,1);
         Assert.assertArrayEquals(board, m1.getBoard());
     }
     @Test
-    public void zumRandTest() throws FieldStatusException, MovementExeption {
+    public void toEdgeTest() throws FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
-        m1.setPiece(3, 5, 1);
+        m1.setPiece(1, 5, 1);
 
         int[][] board= new int [7][7];
         board[3][6]=1;
 
-        m1.movePiece(3,5,3,6,1);
+        m1.jumpPiece(1,5,3,6,1);
         Assert.assertArrayEquals(board, m1.getBoard());
     }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                         Schlecht Tests                                                 //
+    //                                         Bad Tests                                                      //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test (expected = FieldStatusException.class)
-    public void schlechtTestFeldLeer() throws FieldStatusException, MovementExeption {
+    public void badTest_FieldEmpty() throws FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
 
-        m1.movePiece(3,4,4,4,1);
+        m1.jumpPiece(3,4,4,4,1);
     }
     @Test (expected = FieldStatusException.class)
-    public void schlechtTestFeldBesetzt() throws FieldStatusException, MovementExeption {
+    public void badTest_FieldOccupied() throws FieldStatusException {
         Mill m1 = new MillImpl();
         m1.clearBoard();
-        m1.setPiece(4,4,1);
+        m1.setPiece(4,4,2);
+        m1.setPiece(2, 2, 1);
+
+        m1.jumpPiece(2,2,4,4,1);
+    }
+    @Test (expected = FieldStatusException.class)
+    public void badTest_NotYourToken() throws FieldStatusException {
+        Mill m1 = new MillImpl();
+        m1.clearBoard();
         m1.setPiece(3,4,2);
 
-        m1.movePiece(3,4,4,4,2);
+        m1.jumpPiece(3,4,5,1,1);
     }
-    @Test (expected = FieldStatusException.class)
-    public void schlechtTestNichtDeinStein() throws FieldStatusException, MovementExeption {
-        Mill m1 = new MillImpl();
-        m1.clearBoard();
-        m1.setPiece(3,4,2);
-        m1.movePiece(3,4,4,4,1);
-    }
-    @Test (expected = MovementExeption.class)
-    public void schlechtTestEntfernung() throws FieldStatusException, MovementExeption {
-        Mill m1 = new MillImpl();
-        m1.clearBoard();
-        m1.setPiece(3,4,1);
 
-        m1.movePiece(3,4,3,6,1);
-    }
 }
-

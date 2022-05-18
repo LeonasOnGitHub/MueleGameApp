@@ -1,6 +1,7 @@
 package Mill;
 
 public interface Mill {
+    enum FIELD_STATUS{VOID, NOT_SET, PLAYER_A, PLAYER_B,}
     /**
      * Phase 1 set piece on the Board
      * @param xCoord
