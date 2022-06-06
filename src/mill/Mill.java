@@ -26,7 +26,7 @@ public interface Mill {
      * @throws FieldStatusException
      * @throws MovementExeption
      */
-    void movePiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD,int playerMark) throws FieldStatusException, MovementExeption;
+    void movePiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD,int playerMark) throws FieldStatusException, MovementExeption, PhaseException;
 
     /**
      * Phase 3 jump on the board
@@ -76,5 +76,11 @@ public interface Mill {
      */
     void clearBoard();
 
+    /**
+     * fills board with -1 on nonselectable  fields
+     * @param array
+     * @return
+     */
+    int[][] defineVoid(int array[][]);
 
 }

@@ -1,23 +1,33 @@
 package mill;
 
 public class MillImpl implements Mill {
-    private static int [][] board = new int[7][7];
+    private static int[][] board = new int[7][7];
 
+    public MillImpl() {
+        defineVoid(board);
+    }
 
     @Override
-    public void setPiece( int xCoord, int yCoord, int playerMark) throws FieldStatusException, PhaseException {
+    public void setPiece(int xCoord, int yCoord, int playerMark) throws FieldStatusException, PhaseException {
 
-        if (isMoveLegit(xCoord,yCoord,1,playerMark)) {
+        if (isMoveLegit(xCoord, yCoord, 1, playerMark)) {
             this.board[xCoord][yCoord] = playerMark;
         }
     }
-    @Override
-    public void movePiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMark) throws FieldStatusException, MovementExeption {
 
+    @Override
+    public void movePiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMark) throws FieldStatusException, MovementExeption, PhaseException {
+
+        if (isYourStone(xCoordS, yCoordS, playerMark)) {
+            if (isMoveLegit(xCoordD, yCoordD, 2, playerMark)) {
+                this.board[xCoordS][yCoordS] = 0;
+                this.board[xCoordD][yCoordD] = playerMark;
+            }
+        }
     }
 
     @Override
-    public void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMark) throws FieldStatusException{
+    public void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMark) throws FieldStatusException {
 
     }
 
@@ -33,9 +43,9 @@ public class MillImpl implements Mill {
     @Override
     public int numberOfPlayerTokens(int playerMark) {
         int tokenCount = 0;
-        for (int i = 0; i< board.length; i++){
-            for (int j = 0; i< board.length; i++){
-                if (this.board[i][j] == playerMark){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (this.board[i][j] == playerMark) {
                     tokenCount++;
                 }
             }
@@ -47,42 +57,64 @@ public class MillImpl implements Mill {
     public boolean isMoveLegit(int xCoord, int yCoord, int controllInt, int playerMark) throws PhaseException, FieldStatusException {
         boolean result = true;
 
-        if(BoardEngineImpl.gamePhase != controllInt){
+
+        if (checkPlayerPhase(playerMark, controllInt) != controllInt) {
             throw new PhaseException();
-        } else if (checkPlayerPhase(playerMark)!=controllInt){
-            throw new PhaseException();
-        } else if (this.board[xCoord][yCoord] != 0){
+        } else if (this.board[xCoord][yCoord] != 0) {
             throw new FieldStatusException("Position already occupied! Please choose a different one");
         }
 
         return result;
     }
 
-    private int checkPlayerPhase(int palyerMark){
-        int result=2;
-        if (numberOfPlayerTokens(palyerMark)==3){
-            result=3;
-        }else if (numberOfPlayerTokens(palyerMark)<3){
-            result=4;
+    private int checkPlayerPhase(int palyerMark, int controllInt) {
+        int result = 1;
+        int numberOfPlayerTokens = numberOfPlayerTokens(palyerMark);
+
+        if (controllInt > 1) {
+            if (numberOfPlayerTokens > 3) {
+                result = 2;
+            } else if (numberOfPlayerTokens(palyerMark) == 3) {
+                result = 3;
+            } else {
+                result = 4;
+            }
         }
         return result;
     }
-    private boolean isYourStone(int xCoord, int yCoord, int playerMark) throws FieldStatusException{
+
+    private boolean isYourStone(int xCoord, int yCoord, int playerMark) throws FieldStatusException {
         boolean result = true;
 
-        if(playerMark != this.board[xCoord][yCoord]){
-            throw new FieldStatusException("The stone you are trying to move is not yours! ");
+        if (playerMark != this.board[xCoord][yCoord]) {
+            throw new FieldStatusException("The stone you are trying to move is not yours!");
         }
 
         return result;
     }
+
     @Override
     public void clearBoard() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                board[i][j] = 0;
+                if (board[i][j] != -1) {
+                    board[i][j] = 0;
+                }
             }
         }
     }
 
+    @Override
+    public int[][] defineVoid(int array[][]) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array.length; j++) {
+                if (i == 0 && j == 1 || i == 1 && j == 0 || i == 3 && j == 3 || i == 2 && j == 0 || i == 0 && j == 2 || i == 0 && j == 3 || i == 3 && j == 0 || i == 0 && j == 4 || i == 4 && j == 0 || i == 0 && j == 5 || i == 5 && j == 0 || i == 1 && j == 2 || i == 2 && j == 1 || i == 1 && j == 4 || i == 4 && j == 1 || i == 1 && j == 6 || i == 6 && j == 1 || i == 2 && j == 5 || i == 5 && j == 2 || i == 2 && j == 6 || i == 6 && j == 2 || i == 5 && j == 4 || i == 4 && j == 5 || i == 4 && j == 6 || i == 6 && j == 4 || i == 5 && j == 6 || i == 6 && j == 5) {
+                    array[i][j] = -1;
+                }
+            }
+        }
+        return array;
+    }
 }
+
+
