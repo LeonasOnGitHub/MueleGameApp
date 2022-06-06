@@ -1,4 +1,4 @@
-package Mill;
+package mill;
 
 public class MovementExeption extends Exception {
 }

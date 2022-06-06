@@ -1,8 +1,8 @@
 package UI;
 
-import Mill.GameException;
-import Mill.InputException;
-import Mill.StatusException;
+import mill.PhaseException;
+import mill.InputException;
+import mill.StatusException;
 
 import java.io.*;
 
@@ -132,7 +132,7 @@ public class MillUI {
                 }
             } catch (StatusException ex) {
                 this.outStream.println("wrong status: " + ex.getLocalizedMessage());
-            } catch (GameException ex) {
+            } catch (PhaseException ex) {
                 this.outStream.println("game exception: " + ex.getLocalizedMessage());
             } catch (RuntimeException ex) {
                 this.outStream.println("runtime problems: " + ex.getLocalizedMessage());
@@ -145,7 +145,7 @@ public class MillUI {
     private void doExit ()  throws IOException {
     }
 
-    private void doSet (String parameterString) throws StatusException, GameException, InputException {
+    private void doSet (String parameterString) throws StatusException, PhaseException, InputException {
 
         checkStatusConnection();
         int xCoord = mergeStringX(parameterString);
