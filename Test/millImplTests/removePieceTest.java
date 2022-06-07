@@ -1,4 +1,4 @@
-package millImplTest;
+package millImplTests;
 
 import mill.FieldStatusException;
 import mill.*;

@@ -17,9 +17,37 @@ public class MillImpl implements Mill {
 
     @Override
     public void movePiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMark) throws FieldStatusException, MovementExeption, PhaseException {
-
+        int maxSpacesBetweenFields = 2;
         if (isYourStone(xCoordS, yCoordS, playerMark)) {
             if (isMoveLegit(xCoordD, yCoordD, 2, playerMark)) {
+
+                // checks if the fields are side by side
+                if (xCoordS != xCoordD) {   //checks if movement is on the axis
+                    for (int i = 0; i <= maxSpacesBetweenFields; i++) { //counts actual void fields between S and D
+                        if (xCoordS+1+i == xCoordD || xCoordS-1-i == xCoordD){ //checks if the field (minus or plus the void fields) are side by side and breaks the loop if so
+                            break;
+                        } else if (xCoordS < xCoordD && xCoordS+1+i< board.length && board[xCoordS+1+i][yCoordS] == -1) { //checks if the field next to the field before is void (in plus direction) and let th loop carry on
+
+                        } else if (xCoordS > xCoordD && xCoordS-1-i>=0 && board[xCoordS-1-i][yCoordS] == -1) { //checks if the field next to the field before is void (in minus direction) and let th loop carry on
+
+                        }else {
+                            throw new MovementExeption(); // if the D is too far away from S throw Exception
+                        }
+                    }
+
+                }else if (yCoordS != yCoordD){
+                    for (int i = 0; i <= maxSpacesBetweenFields; i++) {
+                        if (yCoordS+1+i == yCoordD || yCoordS-1-i == yCoordD){
+                            break;
+                        } else if (yCoordS < yCoordD && yCoordS+1+i< board.length && board[xCoordS][yCoordS+1+i] == -1) {
+
+                        } else if (yCoordS > yCoordD && yCoordS-1-i>=0 && board[xCoordS][yCoordS-1-i] == -1 ) {
+
+                        } else {
+                            throw new MovementExeption();
+                        }
+                    }
+                }
                 this.board[xCoordS][yCoordS] = 0;
                 this.board[xCoordD][yCoordD] = playerMark;
             }

@@ -1,4 +1,4 @@
-package millImplTest;
+package millImplTests;
 
 import mill.*;
 import org.junit.Assert;

@@ -1,32 +1,34 @@
 package UI;
 
-import mill.PhaseException;
-import mill.InputException;
-import mill.StatusException;
+import mill.*;
 
 import java.io.*;
 
 public class MillUI {
-
-    private static int phase=0;
+    private static int[][] controllArray = new int[7][7];
+    private static Mill board = new MillImpl();
+    private static BoardEngine engine = new BoardEngineImpl();
     private static final String PRINT = "print";
     private static final String EXIT = "exit";
     private static final String CONNECT = "connect";
     private static final String OPEN = "open";
     private static final String SET = "set";
+    private static final String MOVE = "move";
+    private static final String JUMP = "jump";
     private static String[] playerNames= new String[2];
     private final PrintStream outStream;
     private final String playerName;
     private final BufferedReader inBufferedReader;
-
-
-
+    
+    
+    
     public static void main (String[] args) {
 
         System.out.println("Welcome to Mill!");
 
         getPLayerNames();
-        phase++;
+        engine.setGamePhase(1);
+        controllArray=board.defineVoid(controllArray);
 
         MillUI userCmd = new MillUI(playerNames[0], System.out, System.in);
         userCmd.printUsage();
@@ -63,6 +65,10 @@ public class MillUI {
         b.append("\n");
         b.append(SET);
         b.append(".. set a piece with SET (0-6) (A-G)");
+        b.append(MOVE);
+        b.append(".. move a piece with MOVE (0-6) (A-G) (0-6) (A-G)");
+        b.append(JUMP);
+        b.append(".. jump with a piece with JUMP (0-6) (A-G) (0-6) (A-G)");
         b.append("\n");
         b.append(EXIT);
         b.append(".. exit");
@@ -113,6 +119,16 @@ public class MillUI {
                         // redraw
                         this.doPrint();
                         break;
+                    case MOVE:
+                        this.doMove(parameterString);
+                        // redraw
+                        this.doPrint();
+                        break;
+                    case JUMP:
+                        this.doJump(parameterString);
+                        // redraw
+                        this.doPrint();
+                        break;
                     case "q": // convenience
                     case EXIT:
                         again = false; this.doExit(); break; // end loop
@@ -137,38 +153,29 @@ public class MillUI {
             } catch (RuntimeException ex) {
                 this.outStream.println("runtime problems: " + ex.getLocalizedMessage());
             }catch (InputException ex) {
-                this.outStream.println("wrong input " + ex.getLocalizedMessage());
+                this.outStream.println("wrong input" + ex.getLocalizedMessage());
             }
         }
+    }
+
+    private void doJump(String parameterString) throws PhaseException {
+        if (engine.getGamePhase()!=2){throw new PhaseException();}
+    }
+
+    private void doMove(String parameterString) throws PhaseException {
+        if (engine.getGamePhase()!=2){throw new PhaseException();}
     }
 
     private void doExit ()  throws IOException {
     }
 
     private void doSet (String parameterString) throws StatusException, PhaseException, InputException {
-
+        if (engine.getGamePhase()!=1){throw new PhaseException();}
         checkStatusConnection();
         int xCoord = mergeStringX(parameterString);
-        checkIfFieldVoid();
-
-        switch (phase) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            default:
-            //Game over
-                break;
-        }
+        
     }
-
-
+    
     private void doOpen() {
     }
 
@@ -178,9 +185,9 @@ public class MillUI {
     private void doPrint() {
     }
 
-    private int mergeStringX(String xKoord) throws InputException {
+    private int mergeStringX(String xCoord) throws InputException {
         int x=0;
-        switch (xKoord){
+        switch (xCoord){
             case "A":
                 x=0;
                 break;
@@ -190,18 +197,36 @@ public class MillUI {
             case "C":
                 x=2;
                 break;
+            case "D":
+                x=3;
+                break;
+            case "E":
+                x=4;
+                break;
+            case "F":
+                x=5;
+                break;
+            case "G":
+                x=6;
+                break;
             default:
-                throw new InputException("for the X coordinate");
+                throw new InputException(" for the X coordinate");
         }
         return x;
     }
     private void checkY(int yKoord) throws InputException {
-        if (yKoord<0 || yKoord>2){
-            throw new InputException("for the Y coordinate");
+        if (yKoord<0 || yKoord>6){
+            throw new InputException(" for the Y coordinate");
         }
     }
-    private void checkIfFieldVoid(){
-
+    private void checkVoid(int xCoord, int yCoord) throws InputException{
+        for (int i = 0; i < controllArray.length; i++) {
+            for (int j = 0; j < controllArray.length; j++) {
+                if (controllArray[xCoord][yCoord] == -1) {
+                    throw new InputException("! this position does not exist");
+                }
+            }
+        }
     }
 
     private void checkStatusConnection() {
