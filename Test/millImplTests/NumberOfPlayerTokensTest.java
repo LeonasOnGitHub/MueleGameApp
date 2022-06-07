@@ -4,7 +4,7 @@ import mill.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class numberOfPlayerTokensTest {
+public class NumberOfPlayerTokensTest {
     Mill board = new MillImpl();
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                        good Tests                                                      //

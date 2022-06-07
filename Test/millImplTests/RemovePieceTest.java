@@ -5,7 +5,7 @@ import mill.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class removePieceTest {
+public class RemovePieceTest {
     Mill game = new MillImpl();
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                        good Tests                                                      //
@@ -17,7 +17,6 @@ public class removePieceTest {
 
         int[][] board= new int [7][7];
         board = game.defineVoid(board);
-        board[3][1]=0;
 
         this.game.removePiece(3,2, 2);
         Assert.assertArrayEquals(board, this.game.getBoard());
@@ -29,7 +28,6 @@ public class removePieceTest {
 
         int[][] board= new int [7][7];
         board = game.defineVoid(board);
-        board[2][4]=0;
 
         this.game.removePiece(2,4, 1);
         Assert.assertArrayEquals(board, this.game.getBoard());
@@ -44,7 +42,6 @@ public class removePieceTest {
 
         int[][] board= new int [7][7];
         board = game.defineVoid(board);
-        board[6][3]=0;
 
         this.game.removePiece(6,3, 1);
         Assert.assertArrayEquals(board, this.game.getBoard());
@@ -56,7 +53,7 @@ public class removePieceTest {
     public void badTest_FieldEmpty() throws FieldStatusException {
         game.clearBoard();
 
-        game.removePiece(5,4,1);
+        game.removePiece(4,4,1);
     }
     @Test (expected = FieldStatusException.class)
     public void badTest_YourStone() throws FieldStatusException, PhaseException {

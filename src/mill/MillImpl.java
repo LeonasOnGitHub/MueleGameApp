@@ -2,6 +2,7 @@ package mill;
 
 public class MillImpl implements Mill {
     private static int[][] board = new int[7][7];
+    private BoardEngine engine = new BoardEngineImpl();
 
     public MillImpl() {
         defineVoid(board);
@@ -35,7 +36,7 @@ public class MillImpl implements Mill {
                         }
                     }
 
-                }else if (yCoordS != yCoordD){
+                } else if (yCoordS != yCoordD){
                     for (int i = 0; i <= maxSpacesBetweenFields; i++) {
                         if (yCoordS+1+i == yCoordD || yCoordS-1-i == yCoordD){
                             break;
@@ -51,16 +52,34 @@ public class MillImpl implements Mill {
                 this.board[xCoordS][yCoordS] = 0;
                 this.board[xCoordD][yCoordD] = playerMark;
             }
+        } else {
+            throw new FieldStatusException("The stone you are trying to move is not yours!");
         }
     }
 
     @Override
-    public void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMark) throws FieldStatusException {
+    public void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD, int playerMark) throws FieldStatusException, PhaseException {
+        if (isYourStone(xCoordS, yCoordS, playerMark)) {
+            if (isMoveLegit(xCoordD, yCoordD, 3, playerMark)) {
 
+                this.board[xCoordS][yCoordS] = 0;
+                this.board[xCoordD][yCoordD] = playerMark;
+            }
+        } else {
+            throw new FieldStatusException("The stone you are trying to move is not yours!");
+        }
     }
 
+    //TODO drüber nachdenken wo und wie ich diese Methode aufrufen soll
     @Override
-    public void removePiece(int xCoord, int yCoord, int playerMarc) throws FieldStatusException {
+    public void removePiece(int xCoord, int yCoord, int playerMark) throws FieldStatusException {
+        if(isYourStone(xCoord, yCoord, playerMark)){
+            throw new FieldStatusException("this is your stone you are trying to remove!");
+        }else if (this.board[xCoord][yCoord]==0){
+            throw new FieldStatusException("this position is empty");
+        }
+        this.board[xCoord][yCoord]=0;
+
 
     }
 
@@ -85,10 +104,10 @@ public class MillImpl implements Mill {
     public boolean isMoveLegit(int xCoord, int yCoord, int controllInt, int playerMark) throws PhaseException, FieldStatusException {
         boolean result = true;
 
-
         if (checkPlayerPhase(playerMark, controllInt) != controllInt) {
             throw new PhaseException();
         } else if (this.board[xCoord][yCoord] != 0) {
+            System.out.println(this.board[xCoord][yCoord]);
             throw new FieldStatusException("Position already occupied! Please choose a different one");
         }
 
@@ -97,12 +116,12 @@ public class MillImpl implements Mill {
 
     private int checkPlayerPhase(int palyerMark, int controllInt) {
         int result = 1;
-        int numberOfPlayerTokens = numberOfPlayerTokens(palyerMark);
 
         if (controllInt > 1) {
+            int numberOfPlayerTokens = numberOfPlayerTokens(palyerMark);
             if (numberOfPlayerTokens > 3) {
                 result = 2;
-            } else if (numberOfPlayerTokens(palyerMark) == 3) {
+            } else if (numberOfPlayerTokens == 3) {
                 result = 3;
             } else {
                 result = 4;
@@ -115,7 +134,7 @@ public class MillImpl implements Mill {
         boolean result = true;
 
         if (playerMark != this.board[xCoord][yCoord]) {
-            throw new FieldStatusException("The stone you are trying to move is not yours!");
+            result=false;
         }
 
         return result;
@@ -136,7 +155,7 @@ public class MillImpl implements Mill {
     public int[][] defineVoid(int array[][]) {
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array.length; j++) {
-                if (i == 0 && j == 1 || i == 1 && j == 0 || i == 3 && j == 3 || i == 2 && j == 0 || i == 0 && j == 2 || i == 0 && j == 3 || i == 3 && j == 0 || i == 0 && j == 4 || i == 4 && j == 0 || i == 0 && j == 5 || i == 5 && j == 0 || i == 1 && j == 2 || i == 2 && j == 1 || i == 1 && j == 4 || i == 4 && j == 1 || i == 1 && j == 6 || i == 6 && j == 1 || i == 2 && j == 5 || i == 5 && j == 2 || i == 2 && j == 6 || i == 6 && j == 2 || i == 5 && j == 4 || i == 4 && j == 5 || i == 4 && j == 6 || i == 6 && j == 4 || i == 5 && j == 6 || i == 6 && j == 5) {
+                if (i == 0 && j == 1 || i == 1 && j == 0 || i == 3 && j == 3 || i == 2 && j == 0 || i == 0 && j == 2 || i == 0 && j == 4 || i == 4 && j == 0 || i == 0 && j == 5 || i == 5 && j == 0 || i == 1 && j == 2 || i == 2 && j == 1 || i == 1 && j == 4 || i == 4 && j == 1 || i == 1 && j == 6 || i == 6 && j == 1 || i == 2 && j == 5 || i == 5 && j == 2 || i == 2 && j == 6 || i == 6 && j == 2 || i == 5 && j == 4 || i == 4 && j == 5 || i == 4 && j == 6 || i == 6 && j == 4 || i == 5 && j == 6 || i == 6 && j == 5) {
                     array[i][j] = -1;
                 }
             }

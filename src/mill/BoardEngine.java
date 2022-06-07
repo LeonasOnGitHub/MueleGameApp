@@ -1,11 +1,9 @@
 package mill;
 
 public interface BoardEngine {
-    int playerMark = 0;
-    int gamePhase = 0;
 
     /**
-     *
+     * switches the player mark back and forth
      */
     void changePLayerOnTurn();
 
@@ -17,8 +15,9 @@ public interface BoardEngine {
 
     /**
      * declares the winner
+     * @param playerWins
      */
-    void endOfGame();
+    void endOfGame(int playerWins);
 
     /**
      *
@@ -32,4 +31,20 @@ public interface BoardEngine {
      */
     int getGamePhase();
 
+    /**
+     *
+     * @return the number of tokens until the set phase is over
+     */
+    int getTokensUntilGamePhase2();
+
+    /**
+     * counts the number of tokens until the set phase is over down
+     */
+    void countDownTokensUntilGamePhase2();
+
+    /**
+     *
+     * @return the winner of the game
+     */
+    public int getWinner();
 }

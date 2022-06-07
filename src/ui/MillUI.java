@@ -1,4 +1,4 @@
-package UI;
+package ui;
 
 import mill.*;
 
@@ -21,14 +21,16 @@ public class MillUI {
     private final BufferedReader inBufferedReader;
     
     
-    
     public static void main (String[] args) {
 
         System.out.println("Welcome to Mill!");
 
+        //prepare the game
         getPLayerNames();
         engine.setGamePhase(1);
         controllArray=board.defineVoid(controllArray);
+
+
 
         MillUI userCmd = new MillUI(playerNames[0], System.out, System.in);
         userCmd.printUsage();
@@ -65,8 +67,10 @@ public class MillUI {
         b.append("\n");
         b.append(SET);
         b.append(".. set a piece with SET (0-6) (A-G)");
+        b.append("\n");
         b.append(MOVE);
         b.append(".. move a piece with MOVE (0-6) (A-G) (0-6) (A-G)");
+        b.append("\n");
         b.append(JUMP);
         b.append(".. jump with a piece with JUMP (0-6) (A-G) (0-6) (A-G)");
         b.append("\n");
@@ -160,10 +164,20 @@ public class MillUI {
 
     private void doJump(String parameterString) throws PhaseException {
         if (engine.getGamePhase()!=2){throw new PhaseException();}
+
+        //end of turn:
+        gameOver();
+        doPrint();
+        engine.changePLayerOnTurn();
     }
 
     private void doMove(String parameterString) throws PhaseException {
         if (engine.getGamePhase()!=2){throw new PhaseException();}
+
+        //end of turn:
+        gameOver();
+        doPrint();
+        engine.changePLayerOnTurn();
     }
 
     private void doExit ()  throws IOException {
@@ -173,7 +187,18 @@ public class MillUI {
         if (engine.getGamePhase()!=1){throw new PhaseException();}
         checkStatusConnection();
         int xCoord = mergeStringX(parameterString);
-        
+
+
+        //end of turn:
+        //checks id set phase os over
+        if (engine.getTokensUntilGamePhase2() == 0){
+            engine.getGamePhase();
+        } else {
+            engine.countDownTokensUntilGamePhase2();
+        }
+        gameOver();
+        doPrint();
+        engine.changePLayerOnTurn();
     }
     
     private void doOpen() {
@@ -183,8 +208,30 @@ public class MillUI {
     }
 
     private void doPrint() {
+
+        if(engine.getGamePhase()==3){
+            if (engine.getPlayerMark() == engine.getWinner()){
+                System.out.println("YOU WON!");
+            } else {
+                System.out.println("YOU LOST!");
+            }//TODO das doppelte eingabe problem lösen
+        } else { // if player on turn = engine.getPlayerMark
+            // your turn
+        }//else
+            //please wait
     }
 
+    private void gameOver(){
+        if (engine.getPlayerMark()==1){
+            if (board.numberOfPlayerTokens(2)<3){
+                engine.endOfGame(1);
+            }
+        } else {
+            if (board.numberOfPlayerTokens(1)<3) {
+                engine.endOfGame(2);
+            }
+        }
+    }
     private int mergeStringX(String xCoord) throws InputException {
         int x=0;
         switch (xCoord){

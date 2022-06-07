@@ -37,7 +37,7 @@ public interface Mill {
      * @param playerMark
      * @throws FieldStatusException
      */
-    void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD,int playerMark) throws FieldStatusException;
+    void jumpPiece(int xCoordS, int yCoordS, int xCoordD, int yCoordD,int playerMark) throws FieldStatusException, PhaseException;
 
     /**
      * Remove piece from board
