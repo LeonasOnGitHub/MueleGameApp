@@ -3,6 +3,7 @@ package ui;
 import mill.*;
 
 import java.io.*;
+import java.util.StringTokenizer;
 
 public class MillUI {
     private static int[][] controllArray = new int[7][7];
@@ -19,8 +20,12 @@ public class MillUI {
     private final PrintStream outStream;
     private final String playerName;
     private final BufferedReader inBufferedReader;
-    
-    
+    private  int yCoordS;
+    private int xCoordD;
+    private int xCoordS;
+    private int yCoordD;
+
+
     public static void main (String[] args) {
 
         System.out.println("Welcome to Mill!");
@@ -107,6 +112,23 @@ public class MillUI {
                 String parameterString = cmdLineString.substring(spaceIndex);
                 parameterString = parameterString.trim();
 
+                //splits the parameterString to an int (yCoord) and a String (xCoord)
+                StringTokenizer st = new StringTokenizer(parameterString);
+                String sCoordinateS = st.nextToken();
+                int iCoordinateS = Integer.parseInt(st.nextToken());
+                //check and split a second time if the string has source and destination in it
+                if (commandString.toLowerCase() == MOVE || commandString.toLowerCase() == JUMP){
+                    String sCoordinateD = st.nextToken();
+                    int iCoordinateD = Integer.parseInt(st.nextToken());
+                    // merges the String to an int and cheks if the coordinates are on the board
+                    this.xCoordD = mergeStringX(sCoordinateD);
+                    this.yCoordD = checkY(iCoordinateD);
+                }
+
+                // merges the String to an int and cheks if the coordinates are on the board
+                this.xCoordS = mergeStringX(sCoordinateS);
+                checkY(iCoordinateS);
+
                 // start command loop
                 switch (commandString) {
                     case PRINT:
@@ -119,19 +141,25 @@ public class MillUI {
                         this.doOpen();
                         break;
                     case SET:
-                        this.doSet(parameterString);
-                        // redraw
+                        this.doSet();
+                        // end of turn
+                        this.gameOver();
                         this.doPrint();
+                        this.engine.changePLayerOnTurn();
                         break;
                     case MOVE:
-                        this.doMove(parameterString);
-                        // redraw
+                        this.doMove();
+                        // end of turn
+                        this.gameOver();
                         this.doPrint();
+                        this.engine.changePLayerOnTurn();
                         break;
                     case JUMP:
-                        this.doJump(parameterString);
-                        // redraw
+                        this.doJump();
+                        // end of turn
+                        this.gameOver();
                         this.doPrint();
+                        this.engine.changePLayerOnTurn();
                         break;
                     case "q": // convenience
                     case EXIT:
@@ -158,47 +186,37 @@ public class MillUI {
                 this.outStream.println("runtime problems: " + ex.getLocalizedMessage());
             }catch (InputException ex) {
                 this.outStream.println("wrong input" + ex.getLocalizedMessage());
+            } catch (FieldStatusException e) {
+                this.outStream.println(e.getLocalizedMessage());
             }
         }
     }
 
-    private void doJump(String parameterString) throws PhaseException {
+    private void doJump() throws PhaseException {
         if (engine.getGamePhase()!=2){throw new PhaseException();}
-
-        //end of turn:
-        gameOver();
-        doPrint();
-        engine.changePLayerOnTurn();
     }
 
-    private void doMove(String parameterString) throws PhaseException {
+    private void doMove() throws PhaseException {
         if (engine.getGamePhase()!=2){throw new PhaseException();}
 
-        //end of turn:
-        gameOver();
-        doPrint();
-        engine.changePLayerOnTurn();
     }
 
     private void doExit ()  throws IOException {
     }
 
-    private void doSet (String parameterString) throws StatusException, PhaseException, InputException {
+    private void doSet () throws StatusException, PhaseException, InputException, FieldStatusException {
         if (engine.getGamePhase()!=1){throw new PhaseException();}
         checkStatusConnection();
-        int xCoord = mergeStringX(parameterString);
 
+        board.setPiece(this.xCoordS, this.yCoordS, engine.getPlayerMark());
 
         //end of turn:
-        //checks id set phase os over
+        //checks if the set-phase is over
         if (engine.getTokensUntilGamePhase2() == 0){
             engine.getGamePhase();
         } else {
             engine.countDownTokensUntilGamePhase2();
         }
-        gameOver();
-        doPrint();
-        engine.changePLayerOnTurn();
     }
     
     private void doOpen() {
@@ -261,10 +279,11 @@ public class MillUI {
         }
         return x;
     }
-    private void checkY(int yKoord) throws InputException {
-        if (yKoord<0 || yKoord>6){
+    private int checkY(int yCoord) throws InputException {
+        if (yCoord<0 || yCoord>6){
             throw new InputException(" for the Y coordinate");
         }
+        return yCoord;
     }
     private void checkVoid(int xCoord, int yCoord) throws InputException{
         for (int i = 0; i < controllArray.length; i++) {
