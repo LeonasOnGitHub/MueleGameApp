@@ -1,6 +1,8 @@
 package mill;
 
 public interface Mill {
+    boolean canRemove = false;
+
     enum FIELD_STATUS{
         VOID, //0
         NOT_SET, //-1
@@ -77,10 +79,15 @@ public interface Mill {
     void clearBoard();
 
     /**
-     * fills board with -1 on nonselectable  fields
+     * fills board with -1 on not selectable  fields
      * @param array
      * @return
      */
     int[][] defineVoid(int array[][]);
 
+    /**
+     *
+     * @return if the previous move closed a mill
+     */
+    boolean closedAMill();
 }

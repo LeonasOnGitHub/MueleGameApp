@@ -14,22 +14,38 @@ public class RemovePieceTest {
     public void goodTest1() throws FieldStatusException, PhaseException {
         game.clearBoard();
         game.setPiece(3, 2, 1);
+        game.setPiece(6, 0, 1);
+        game.setPiece(6, 3, 1);
+        game.setPiece(6, 6, 1);
 
         int[][] board= new int [7][7];
         board = game.defineVoid(board);
+        board[6][0] = 1;
+        board[6][3] = 1;
+        board[6][6] = 1;
 
-        this.game.removePiece(3,2, 2);
+        if (game.closedAMill()){
+            this.game.removePiece(3,2, 2);
+        }
         Assert.assertArrayEquals(board, this.game.getBoard());
     }
     @Test
     public void goodTest2() throws FieldStatusException, PhaseException {
         game.clearBoard();
         game.setPiece(2, 4, 2);
+        game.setPiece(6, 0, 1);
+        game.setPiece(6, 3, 1);
+        game.setPiece(6, 6, 1);
 
         int[][] board= new int [7][7];
         board = game.defineVoid(board);
+        board[6][0] = 1;
+        board[6][3] = 1;
+        board[6][6] = 1;
 
-        this.game.removePiece(2,4, 1);
+        if (game.closedAMill()) {
+            this.game.removePiece(2, 4, 1);
+        }
         Assert.assertArrayEquals(board, this.game.getBoard());
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,11 +55,19 @@ public class RemovePieceTest {
     public void onEdgeTest() throws FieldStatusException, PhaseException {
         game.clearBoard();
         game.setPiece(6, 3, 2);
+        game.setPiece(0, 0, 1);
+        game.setPiece(0, 3, 1);
+        game.setPiece(0, 6, 1);
 
         int[][] board= new int [7][7];
         board = game.defineVoid(board);
+        board[0][0] = 1;
+        board[0][3] = 1;
+        board[0][6] = 1;
 
-        this.game.removePiece(6,3, 1);
+        if (game.closedAMill()) {
+            this.game.removePiece(6, 3, 1);
+        }
         Assert.assertArrayEquals(board, this.game.getBoard());
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,5 +85,21 @@ public class RemovePieceTest {
         game.setPiece(4,4,2);
 
         game.removePiece(4,4, 2);
+    }
+    @Test
+    public void badTest_noMill() throws FieldStatusException, PhaseException {
+        game.clearBoard();
+        game.setPiece(3, 2, 1);
+        game.setPiece(6,6,2);
+
+        int[][] board= new int [7][7];
+        board = game.defineVoid(board);
+        board[3][2] = 1;
+        board[6][6] = 1;
+
+        if (game.closedAMill()){
+            this.game.removePiece(3,2, 2);
+        }
+        Assert.assertArrayEquals(board, this.game.getBoard());
     }
 }

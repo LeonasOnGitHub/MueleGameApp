@@ -2,7 +2,7 @@ package mill;
 
 public class MillImpl implements Mill {
     private static int[][] board = new int[7][7];
-    private BoardEngine engine = new BoardEngineImpl();
+
 
     public MillImpl() {
         defineVoid(board);
@@ -32,7 +32,7 @@ public class MillImpl implements Mill {
                         } else if (xCoordS > xCoordD && xCoordS-1-i>=0 && board[xCoordS-1-i][yCoordS] == -1) { //checks if the field next to the field before is void (in minus direction) and let th loop carry on
 
                         }else {
-                            throw new MovementExeption(); // if the D is too far away from S throw Exception
+                            throw new MovementExeption(); // if  D is too far away from S throw Exception
                         }
                     }
 
@@ -162,6 +162,12 @@ public class MillImpl implements Mill {
         }
         return array;
     }
+
+    @Override
+    public boolean closedAMill() {
+        return false;
+    }
+
 }
 
 

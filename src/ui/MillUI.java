@@ -16,6 +16,7 @@ public class MillUI {
     private static final String SET = "set";
     private static final String MOVE = "move";
     private static final String JUMP = "jump";
+    private static final String REMOVE = "remove";
     private static String[] playerNames= new String[2];
     private final PrintStream outStream;
     private final String playerName;
@@ -24,6 +25,7 @@ public class MillUI {
     private int xCoordD;
     private int xCoordS;
     private int yCoordD;
+
 
 
     public static void main (String[] args) {
@@ -143,21 +145,25 @@ public class MillUI {
                     case SET:
                         this.doSet();
                         // end of turn
-                        this.gameOver();
                         this.doPrint();
                         this.engine.changePLayerOnTurn();
                         break;
                     case MOVE:
                         this.doMove();
                         // end of turn
-                        this.gameOver();
                         this.doPrint();
                         this.engine.changePLayerOnTurn();
                         break;
                     case JUMP:
                         this.doJump();
                         // end of turn
-                        this.gameOver();
+                        this.doPrint();
+                        this.engine.changePLayerOnTurn();
+                        break;
+                    case REMOVE:
+                        this.doRemove();
+                        // end of turn
+                        this.checkIfGameOver();
                         this.doPrint();
                         this.engine.changePLayerOnTurn();
                         break;
@@ -181,15 +187,20 @@ public class MillUI {
             } catch (StatusException ex) {
                 this.outStream.println("wrong status: " + ex.getLocalizedMessage());
             } catch (PhaseException ex) {
-                this.outStream.println("game exception: " + ex.getLocalizedMessage());
+                this.outStream.println("phase exception: you are not in the right phase to do that" );
             } catch (RuntimeException ex) {
                 this.outStream.println("runtime problems: " + ex.getLocalizedMessage());
             }catch (InputException ex) {
-                this.outStream.println("wrong input" + ex.getLocalizedMessage());
+                this.outStream.println("wrong input " + ex.getLocalizedMessage());
             } catch (FieldStatusException e) {
-                this.outStream.println(e.getLocalizedMessage());
+                this.outStream.println("wrong field " +e.getLocalizedMessage());
             }
         }
+    }
+
+    private void doRemove() throws PhaseException {
+        if (!board.canRemove){throw new PhaseException();}
+
     }
 
     private void doJump() throws PhaseException {
@@ -227,19 +238,20 @@ public class MillUI {
 
     private void doPrint() {
 
-        if(engine.getGamePhase()==3){
-            if (engine.getPlayerMark() == engine.getWinner()){
+        if (engine.getGamePhase() == 3) {
+            if (engine.getPlayerMark() == engine.getWinner()) {
                 System.out.println("YOU WON!");
             } else {
                 System.out.println("YOU LOST!");
             }//TODO das doppelte eingabe problem lösen
         } else { // if player on turn = engine.getPlayerMark
             // your turn
-        }//else
-            //please wait
+        }//else {
+        //please wait }
+
     }
 
-    private void gameOver(){
+    private void checkIfGameOver(){
         if (engine.getPlayerMark()==1){
             if (board.numberOfPlayerTokens(2)<3){
                 engine.endOfGame(1);
