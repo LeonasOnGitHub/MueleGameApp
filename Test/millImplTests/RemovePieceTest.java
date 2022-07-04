@@ -14,17 +14,17 @@ public class RemovePieceTest {
     public void goodTest1() throws FieldStatusException, PhaseException {
         game.clearBoard();
         game.setPiece(3, 2, 1);
-        game.setPiece(6, 0, 1);
-        game.setPiece(6, 3, 1);
+        game.setPiece(0, 6, 1);
+        game.setPiece(3, 6, 1);
         game.setPiece(6, 6, 1);
 
         int[][] board= new int [7][7];
         board = game.defineVoid(board);
-        board[6][0] = 1;
-        board[6][3] = 1;
+        board[0][6] = 1;
+        board[3][6] = 1;
         board[6][6] = 1;
 
-        if (game.closedAMill()){
+        if (game.closedAMill(6, 6, 1)){
             this.game.removePiece(3,2, 2);
         }
         Assert.assertArrayEquals(board, this.game.getBoard());
@@ -43,7 +43,7 @@ public class RemovePieceTest {
         board[6][3] = 1;
         board[6][6] = 1;
 
-        if (game.closedAMill()) {
+        if (game.closedAMill(6, 6, 1)) {
             this.game.removePiece(2, 4, 1);
         }
         Assert.assertArrayEquals(board, this.game.getBoard());
@@ -65,7 +65,7 @@ public class RemovePieceTest {
         board[0][3] = 1;
         board[0][6] = 1;
 
-        if (game.closedAMill()) {
+        if (game.closedAMill(0, 6, 1)) {
             this.game.removePiece(6, 3, 1);
         }
         Assert.assertArrayEquals(board, this.game.getBoard());
@@ -90,14 +90,14 @@ public class RemovePieceTest {
     public void badTest_noMill() throws FieldStatusException, PhaseException {
         game.clearBoard();
         game.setPiece(3, 2, 1);
-        game.setPiece(6,6,2);
+        game.setPiece(6,6,1);
 
         int[][] board= new int [7][7];
         board = game.defineVoid(board);
         board[3][2] = 1;
         board[6][6] = 1;
 
-        if (game.closedAMill()){
+        if (game.closedAMill(6, 6, 1)){
             this.game.removePiece(3,2, 2);
         }
         Assert.assertArrayEquals(board, this.game.getBoard());

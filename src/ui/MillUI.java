@@ -17,9 +17,7 @@ public class MillUI {
     private static final String MOVE = "move";
     private static final String JUMP = "jump";
     private static final String REMOVE = "remove";
-    private static String[] playerNames= new String[2];
     private final PrintStream outStream;
-    private final String playerName;
     private final BufferedReader inBufferedReader;
     private  int yCoordS;
     private int xCoordD;
@@ -33,24 +31,18 @@ public class MillUI {
         System.out.println("Welcome to Mill!");
 
         //prepare the game
-        getPLayerNames();
         engine.setGamePhase(1);
         controllArray=board.defineVoid(controllArray);
 
-
-
-        MillUI userCmd = new MillUI(playerNames[0], System.out, System.in);
+        //start the game
+        MillUI userCmd = new MillUI( System.out, System.in);
         userCmd.printUsage();
         userCmd.runCommandLoop();
     }
 
-    private static void getPLayerNames() {
-        playerNames[0] = "Thomas";
-        playerNames[1] = "Phillip";
-    }
 
-    public MillUI(String playerName, PrintStream os, InputStream is) {
-        this.playerName = playerName;
+
+    public MillUI( PrintStream os, InputStream is) {
         this.outStream = os;
         this.inBufferedReader = new BufferedReader(new InputStreamReader(is));
     }
@@ -147,18 +139,21 @@ public class MillUI {
                         // end of turn
                         this.doPrint();
                         this.engine.changePLayerOnTurn();
+                        board.setCanremove();
                         break;
                     case MOVE:
                         this.doMove();
                         // end of turn
                         this.doPrint();
                         this.engine.changePLayerOnTurn();
+                        board.setCanremove();
                         break;
                     case JUMP:
                         this.doJump();
                         // end of turn
                         this.doPrint();
                         this.engine.changePLayerOnTurn();
+                        board.setCanremove();
                         break;
                     case REMOVE:
                         this.doRemove();
@@ -166,6 +161,7 @@ public class MillUI {
                         this.checkIfGameOver();
                         this.doPrint();
                         this.engine.changePLayerOnTurn();
+                        board.setCanremove();
                         break;
                     case "q": // convenience
                     case EXIT:
@@ -199,16 +195,19 @@ public class MillUI {
     }
 
     private void doRemove() throws PhaseException {
-        if (!board.canRemove){throw new PhaseException();}
+        if (!board.getCanRemove()){throw new PhaseException();}
 
     }
 
     private void doJump() throws PhaseException {
         if (engine.getGamePhase()!=2){throw new PhaseException();}
+
+
     }
 
     private void doMove() throws PhaseException {
         if (engine.getGamePhase()!=2){throw new PhaseException();}
+
 
     }
 

@@ -1,7 +1,6 @@
 package mill;
 
 public interface Mill {
-    boolean canRemove = false;
 
     enum FIELD_STATUS{
         VOID, //0
@@ -87,7 +86,21 @@ public interface Mill {
 
     /**
      *
-     * @return if the previous move closed a mill
+     * @return whether the previous move closed a mill or not
+     * @param xCoord
+     * @param yCoord
+     * @param palyerMark
      */
-    boolean closedAMill();
+    boolean closedAMill(int xCoord, int yCoord, int palyerMark);
+
+    /**
+     *
+     * @return if the player can remove a stone
+     */
+    boolean getCanRemove();
+
+    /**
+     * sets if the player can remove a stone to false after the turn
+     */
+    void setCanremove();
 }
