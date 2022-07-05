@@ -65,13 +65,16 @@ public class MillUI {
         b.append(".. print board");
         b.append("\n");
         b.append(SET);
-        b.append(".. set a piece with SET (0-6) (A-G)");
+        b.append(".. set a piece with set (A-G) (0-6)");
         b.append("\n");
         b.append(MOVE);
-        b.append(".. move a piece with MOVE (0-6) (A-G) (0-6) (A-G)");
+        b.append(".. move a piece with move (A-G) (0-6) (A-G) (0-6)");
         b.append("\n");
         b.append(JUMP);
-        b.append(".. jump with a piece with JUMP (0-6) (A-G) (0-6) (A-G)");
+        b.append(".. jump with a piece with jump (A-G) (0-6) (A-G) (0-6)");
+        b.append("\n");
+        b.append(REMOVE);
+        b.append("remove a stone from the board with remove (A-G) (0-6)");
         b.append("\n");
         b.append(EXIT);
         b.append(".. exit");
@@ -110,10 +113,12 @@ public class MillUI {
                 StringTokenizer st = new StringTokenizer(parameterString);
                 String sCoordinateS = st.nextToken();
                 int iCoordinateS = Integer.parseInt(st.nextToken());
+
                 //check and split a second time if the string has source and destination in it
                 if (commandString.toLowerCase() == MOVE || commandString.toLowerCase() == JUMP){
                     String sCoordinateD = st.nextToken();
                     int iCoordinateD = Integer.parseInt(st.nextToken());
+
                     // merges the String to an int and cheks if the coordinates are on the board
                     this.xCoordD = mergeStringX(sCoordinateD);
                     this.yCoordD = checkY(iCoordinateD);
@@ -196,18 +201,19 @@ public class MillUI {
 
     private void doRemove() throws PhaseException {
         if (!board.getCanRemove()){throw new PhaseException();}
+        checkStatusConnection();
 
     }
 
     private void doJump() throws PhaseException {
         if (engine.getGamePhase()!=2){throw new PhaseException();}
-
+        checkStatusConnection();
 
     }
 
     private void doMove() throws PhaseException {
         if (engine.getGamePhase()!=2){throw new PhaseException();}
-
+        checkStatusConnection();
 
     }
 

@@ -6,12 +6,12 @@ import mill.MillImpl;
 import mill.PhaseException;
 import org.junit.Test;
 
-public class PrintBoardTest {
+public class PrintTest {
     Mill game = new MillImpl();
     Printer print = new PrinterImpl();
 
     @Test
-    public void printTest1() throws FieldStatusException, PhaseException {
+    public void printBoardTest() throws FieldStatusException, PhaseException {
         game.clearBoard();
 
         game.setPiece(3, 2, 1);
@@ -29,4 +29,10 @@ public class PrintBoardTest {
         print.printBoard(board);
 
     }
+
+    @Test
+    public void printRulesTest(){print.printRules();}
+
+    @Test
+    public void printEndOfGameTest(){print.printEndOfGame(1);}
 }
